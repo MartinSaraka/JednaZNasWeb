@@ -1,106 +1,108 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
+  <q-layout view="hhh lpr fff">
+    <!-- Hlavička -->
+    <q-header class="bg-white text-dark q-px-md q-py-sm shadow-1">
+      <div class="row items-center no-wrap justify-between" style="width: 100%">
+        <!-- 1) Ľavá časť: Logo (klikateľné) -->
+        <div
+          class="row items-center no-wrap"
+          style="cursor: pointer"
+          @click="goTo('/')"
+        >
+          <img
+            src="~/assets/CestaVon.png"
+            alt="Jedna Z Nás"
+            style="height: 40px; width: auto"
+            class="q-mr-sm"
+          />
+          <span class="text-h6">Jedna Z Nás</span>
+        </div>
 
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
+        <!-- 2) Pravá časť: Navigácia -->
+        <div class="row items-center no-wrap">
+          <!-- A) Desktop/tablet (md+) -> klasické tlačidlá -->
+          <div
+            class="row items-center no-wrap q-gutter-sm"
+            v-if="!$q.screen.lt.md"
+          >
+            <q-btn flat label="O nás" class="text-dark" @click="goTo('/')" />
+            <q-btn
+              flat
+              label="Projekty"
+              class="text-dark"
+              @click="goTo('/projects')"
+            />
+            <q-btn
+              flat
+              label="Pracovné pozície"
+              class="text-dark"
+              @click="goTo('/job-positions')"
+            />
+            <q-btn
+              flat
+              label="Kontakt"
+              class="text-dark"
+              @click="goTo('/contact')"
+            />
+          </div>
 
-        <div>Quasar v{{ $q.version }}</div>
-      </q-toolbar>
+          <!-- B) Mobil (lt.md) -> q-btn-dropdown -->
+          <div v-else>
+            <q-btn-dropdown flat round icon="menu" color="dark" no-caps>
+              <q-list style="min-width: 180px">
+                <!-- O nás -->
+                <q-item clickable v-ripple @click="goTo('/')">
+                  <q-item-section>O nás</q-item-section>
+                </q-item>
+
+                <!-- Projekty -->
+                <q-item clickable v-ripple @click="goTo('/projects')">
+                  <q-item-section>Projekty</q-item-section>
+                </q-item>
+
+                <!-- Pracovné pozície -->
+                <q-item clickable v-ripple @click="goTo('/job-positions')">
+                  <q-item-section>Pracovné pozície</q-item-section>
+                </q-item>
+
+                <!-- Kontakt -->
+                <q-item clickable v-ripple @click="goTo('/contact')">
+                  <q-item-section>Kontakt</q-item-section>
+                </q-item>
+              </q-list>
+            </q-btn-dropdown>
+          </div>
+        </div>
+      </div>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
-
+    <!-- Obsah -->
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <!-- Pätička -->
+    <q-footer class="bg-grey-1 text-dark text-center q-pa-md">
+      IČO: 42036780 | jednaznasOZ@gmail.com | ©
+      {{ new Date().getFullYear() }} Obč. Z. JEDNA Z NÁS. Všetky práva
+      vyhradené.
+    </q-footer>
   </q-layout>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue';
+import { useRouter } from 'vue-router';
+import { useQuasar } from 'quasar';
 
-defineOptions({
-  name: 'MainLayout'
-});
+const $q = useQuasar();
+const router = useRouter();
 
-const linksList: EssentialLinkProps[] = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-];
-
-const leftDrawerOpen = ref(false);
-
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value;
+function goTo(path: string) {
+  router.push(path);
 }
 </script>
+
+<style scoped>
+/* Ďalšie voliteľné úpravy headeru, loga atď. */
+/* Napr. :hover efekty na logo, atď. */
+</style>
