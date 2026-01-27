@@ -20,7 +20,7 @@
         IČO: 42036780
       </p>
       <p class="text-body1 q-my-sm">
-        Email: <strong>jednaznasOZ@gmail.com</strong><br />
+        Email: <strong>jednaznasoz@gmail.com</strong><br />
       </p>
       <!-- Voliteľne aj adresa, telefónne číslo... -->
     </div>
@@ -41,9 +41,9 @@
 // Jednoduchá funkcia na otvorenie mailto: odkazu
 function openEmail() {
   // Môžeš pridať subject a body:
-  // "mailto:jednaznasOZ@gmail.com?subject=Chcem%20viac%20info&body=Ahoj..."
+  // "mailto:jednaznasoz@gmail.com?subject=Chcem%20viac%20info&body=Ahoj..."
   window.location.href =
-    'mailto:jednaznasOZ@gmail.com?subject=Pozdrav%20zo%20stranky';
+    'mailto:jednaznasoz@gmail.com?subject=Pozdrav%20zo%20stranky';
 }
 </script>
 

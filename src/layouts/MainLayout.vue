@@ -11,11 +11,11 @@
         >
           <img
             src="~/assets/CestaVon.png"
-            alt="Jedna Z Nás"
+            alt="JEDNA Z NÁS"
             style="height: 40px; width: auto"
             class="q-mr-sm"
           />
-          <span class="text-h6">Jedna Z Nás</span>
+          <span class="text-h6">JEDNA Z NÁS</span>
         </div>
 
         <!-- 2) Pravá časť: Navigácia -->
@@ -83,8 +83,8 @@
 
     <!-- Pätička -->
     <q-footer class="bg-grey-1 text-dark text-center q-pa-md">
-      IČO: 42036780 | jednaznasOZ@gmail.com | ©
-      {{ new Date().getFullYear() }} Obč. Z. JEDNA Z NÁS. Všetky práva
+      IČO: 42036780 | jednaznasoz@gmail.com | ©
+      {{ new Date().getFullYear() }} OZ JEDNA Z NÁS. Všetky práva
       vyhradené.
     </q-footer>
   </q-layout>

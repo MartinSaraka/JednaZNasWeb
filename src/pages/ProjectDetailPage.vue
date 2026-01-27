@@ -3,7 +3,16 @@
     <div class="detail-container row justify-center">
       <!-- Ľavý stĺpec (ikona, názov, subtitul) -->
       <div class="col-12 col-md-4 detail-left q-pb-md">
-        <div class="icon-box">
+        <!-- Logo pre PINOKIO -->
+        <div v-if="project?.slug === 'pinokio'" class="icon-box">
+          <img
+            src="~/assets/logo_pinokio.png"
+            alt="PINOKIO"
+            class="pinokio-logo"
+          />
+        </div>
+        <!-- Ikona pre ostatné projekty -->
+        <div v-else class="icon-box">
           <q-icon
             :name="project?.icon"
             :color="project?.iconColor"
@@ -58,6 +67,48 @@
             </p>
           </div>
 
+          <!-- Identifikácia projektu -->
+          <div class="detail-section">
+            <div class="section-header">
+              <q-icon name="info" color="primary" size="24px" class="q-mr-sm" />
+              <span class="text-h6 text-grey-8">Identifikácia projektu</span>
+            </div>
+            <div class="project-info-grid">
+              <div class="info-item">
+                <span class="info-label">Kód projektu:</span>
+                <span class="info-value">401404E401</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Žiadosť o NFP:</span>
+                <span class="info-value">NFP401404D511</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Programové obdobie:</span>
+                <span class="info-value">01.11.2025 – 31.10.2027</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Program:</span>
+                <span class="info-value">Program Slovensko</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Výzva:</span>
+                <span class="info-value">PSK-MPSVR-034-2025-DV-ESF+</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Názov výzvy:</span>
+                <span class="info-value">2N – Nezamestnaní a neaktívni na ceste na trh práce</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Adresa:</span>
+                <span class="info-value">Občianske Združenie JEDNA Z NÁS v budove "Jedáleň s kuchyňou", Soľ 7, 094 35</span>
+              </div>
+              <div class="info-item highlight-item">
+                <span class="info-label">Financovanie z EU:</span>
+                <span class="info-value">657 046,46 €</span>
+              </div>
+            </div>
+          </div>
+
           <!-- Aktivity -->
           <div class="detail-section">
             <div class="section-header">
@@ -97,6 +148,53 @@
               naplno využiť svoj potenciál a aktívne sa zapojiť do spoločnosti.
             </p>
           </div>
+
+          <!-- Plagát projektu -->
+          <div class="text-center q-mt-xl">
+            <img
+              src="~/assets/plagat.png"
+              alt="PINOKIO plagát"
+              class="plagat-image plagat-thumbnail"
+              @click="showPlagatDialog = true"
+            />
+            <div class="text-caption text-grey-7 q-mt-sm">
+              Kliknite pre zväčšenie
+            </div>
+          </div>
+
+          <!-- Text o financovaní -->
+          <div class="text-center q-mt-xl q-px-md">
+            <p class="text-body2 funding-text">
+              Projekt je spolufinancovaný Európskou úniou v rámci Programu Slovensko z Európskeho sociálneho fondu plus (ESF+)
+            </p>
+          </div>
+
+          <!-- Financujúce logá -->
+          <div class="text-center q-mt-md">
+            <img
+              src="~/assets/3loga.png"
+              alt="Financovanie z EU"
+              class="funding-logos"
+            />
+          </div>
+
+          <!-- Dialog pre plagát -->
+          <q-dialog v-model="showPlagatDialog">
+            <q-card class="plagat-dialog">
+              <q-card-section class="row items-center q-pb-none">
+                <div class="text-h6">PINOKIO - Plagát projektu</div>
+                <q-space />
+                <q-btn icon="close" flat round dense v-close-popup />
+              </q-card-section>
+              <q-card-section>
+                <img
+                  src="~/assets/plagat.png"
+                  alt="PINOKIO plagát"
+                  class="plagat-full-size"
+                />
+              </q-card-section>
+            </q-card>
+          </q-dialog>
         </div>
 
         <!-- Formátovanie pre ostatné projekty -->
@@ -256,11 +354,11 @@ a rozširujú obzory pre budúce pracovné príležitosti.`,
   },
   {
     slug: 'pinokio',
-    name: 'PINOKIO',
+    name: '',
     icon: 'work_outline',
     iconColor: 'blue-7',
     shortPurpose:
-      'Podpora integrácie neaktívnych osôb komplexnými a individuálnymi opatreniami',
+      '',
     description: `Projekt je zameraný na podporu neaktívnych mladých osôb do 30 rokov (NEET), ktoré nie sú zamestnané, nie sú vo výcviku, nevzdelávajú sa a ani nie sú evidované na úrade práce. Jeho hlavným cieľom je ich priblíženie k trhu práce prostredníctvom cielenej pomoci v teréne.
 
 Realizuje sa v najmenej rozvinutých okresoch: Košice-okolie, Michalovce, Stropkov, Svidník, Trebišov, Humenné a Vranov nad Topľou na obdobie 24 mesiacov od 1.11.2025.
@@ -272,6 +370,7 @@ Našou ambíciou je vytvoriť inkluzívnejší a dostupnejší trh práce, kde k
 ];
 
 const project = ref<Project | null>(null);
+const showPlagatDialog = ref(false);
 
 // Rozdelenie description na odseky
 const formattedDescription = computed(() => {
@@ -337,10 +436,6 @@ function goToJobPositions() {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.detail-icon {
-  /* stredná veľkosť */
 }
 
 .detail-title {
@@ -447,6 +542,98 @@ function goToJobPositions() {
   background: linear-gradient(135deg, #fffbf0 0%, #ffffff 100%);
 }
 
+/* Logo PINOKIO */
+.pinokio-logo {
+  max-width: 300px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Grid pre informácie o projekte */
+.project-info-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.info-item:hover {
+  background: #e9ecef;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.info-value {
+  color: #1976d2;
+  font-weight: 500;
+}
+
+.highlight-item {
+  background: linear-gradient(135deg, #e3f2fd 0%, #f1f8ff 100%);
+  border: 2px solid #1976d2;
+}
+
+.highlight-item .info-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+/* Plagát a logá */
+.plagat-thumbnail {
+  max-width: 400px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.plagat-thumbnail:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.plagat-dialog {
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+.plagat-full-size {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.funding-text {
+  color: #424242;
+  font-weight: 500;
+  line-height: 1.8;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.funding-logos {
+  max-width: 600px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
 /* Responsivita */
 @media (max-width: 768px) {
   .detail-section {
@@ -468,6 +655,18 @@ function goToJobPositions() {
 
   .buttons-wrapper .q-btn {
     width: 100%;
+  }
+
+  .plagat-thumbnail {
+    max-width: 100%;
+  }
+
+  .funding-logos {
+    max-width: 100%;
+  }
+
+  .pinokio-logo {
+    max-width: 200px;
   }
 }
 </style>

@@ -3,17 +3,13 @@
     <!-- Banner pre projekt -->
     <div class="text-center q-mb-md q-px-md">
       <div class="project-banner q-mx-auto">
-        <div class="text-body1 text-grey-7">Pracovné pozície pre projekt</div>
+        <div class="text-body1 text-grey-7 q-mb-sm">Pracovné pozície pre projekt</div>
         <div class="project-link-wrapper" @click="goToProject">
-          <q-icon
-            name="work_outline"
-            size="24px"
-            color="primary"
-            class="q-mr-xs"
+          <img
+            src="~/assets/logo_pinokio.png"
+            alt="PINOKIO"
+            class="pinokio-logo-banner"
           />
-          <span class="project-link-text text-h6 text-primary cursor-pointer">
-            PINOKIO
-          </span>
         </div>
       </div>
     </div>
@@ -386,7 +382,7 @@
                   Kontaktujte nás na:
                 </div>
                 <div class="text-h6 text-bold text-grey-8 q-mb-md">
-                  jednaznasOZ@gmail.com
+                  jednaznasoz@gmail.com
                 </div>
                 <q-btn
                   label="Napísať email"
@@ -443,6 +439,20 @@
         </q-card-section>
       </q-card>
     </section>
+
+    <!-- Text o financovaní a logá -->
+    <section class="text-center q-px-md q-pb-xl q-mt-xl">
+      <div class="q-mb-md">
+        <p class="text-body2 funding-text">
+          Projekt je spolufinancovaný Európskou úniou v rámci Programu Slovensko z Európskeho sociálneho fondu plus (ESF+)
+        </p>
+      </div>
+      <img
+        src="~/assets/3loga.png"
+        alt="Financovanie z EU"
+        class="funding-logos"
+      />
+    </section>
   </q-page>
 </template>
 
@@ -457,7 +467,7 @@ function goToContact() {
 
 function sendEmail() {
   window.location.href =
-    'mailto:jednaznasOZ@gmail.com?subject=Záujem o pracovnú pozíciu&body=Dobrý deň,%0D%0A%0D%0AMám záujem o pracovnú pozíciu...';
+    'mailto:jednaznasoz@gmail.com?subject=Záujem o pracovnú pozíciu&body=Dobrý deň,%0D%0A%0D%0AMám záujem o pracovnú pozíciu...';
 }
 
 function goToProject() {
@@ -510,6 +520,37 @@ function goToProject() {
 
 .project-link-text:hover {
   color: #1565c0 !important;
+}
+
+/* Logo PINOKIO v banneri */
+.pinokio-logo-banner {
+  max-width: 350px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.pinokio-logo-banner:hover {
+  transform: scale(1.05);
+}
+
+/* Text o financovaní */
+.funding-text {
+  color: #424242;
+  font-weight: 500;
+  line-height: 1.8;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Financujúce logá */
+.funding-logos {
+  max-width: 600px;
+  height: auto;
+  display: block;
+  margin: 1rem auto 0;
 }
 
 /* Cieľ projektu */
@@ -729,6 +770,14 @@ function goToProject() {
 
   .project-link-text {
     font-size: 1.1rem;
+  }
+
+  .funding-logos {
+    max-width: 100%;
+  }
+
+  .pinokio-logo-banner {
+    max-width: 250px;
   }
 }
 
