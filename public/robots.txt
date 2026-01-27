@@ -1,0 +1,11 @@
+# Robots.txt pre jednaznas.sk
+# Občianske združenie JEDNA Z NÁS
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://jednaznas.sk/sitemap.xml
+
+# Crawl delay (optional, helps with server load)
+Crawl-delay: 1

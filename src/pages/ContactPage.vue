@@ -10,7 +10,7 @@
 
     <!-- Logo (nepovinné) -->
     <div class="text-center q-mb-xl">
-      <img src="~/assets/contact.jpg" alt="Logo" class="logo-img" />
+      <img src="~/assets/contact.jpg" alt="Kontaktný obrázok občianskeho združenia JEDNA Z NÁS" class="logo-img" />
     </div>
 
     <!-- Základné info (IČO, email, atď.) -->

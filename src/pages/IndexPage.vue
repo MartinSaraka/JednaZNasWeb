@@ -5,7 +5,7 @@
     <div class="col-12 col-md-5 text-center animate__animated animate__fadeInLeft q-pb-md">
       <img
         src="~/assets/family.jpg"
-        alt="Family"
+        alt="Rodina - občianske združenie JEDNA Z NÁS pomáha rodinám v núdzi"
         class="hero-image"
       />
     </div>
@@ -148,7 +148,7 @@
     <!-- Obrázok -->
     <img
       src="~/assets/hearth.jpg"
-      alt="Záverečný obrázok"
+      alt="Srdce - dobrovoľníci a projekty občianskeho združenia JEDNA Z NÁS"
       class="overlay-img"
     />
 

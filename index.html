@@ -1,10 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="sk">
   <head>
     <title><%= productName %></title>
 
+    <!-- Basic Meta Tags -->
     <meta charset="utf-8" />
     <meta name="description" content="<%= productDescription %>" />
+    <meta name="keywords" content="občianske združenie, sociálna inklúzia, pomoc znevýhodneným, dobrovoľníctvo, Slovensko, JEDNA Z NÁS, komunita, vzdelávanie" />
+    <meta name="author" content="Občianske združenie JEDNA Z NÁS" />
+    <meta name="robots" content="index, follow" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
     <meta
@@ -12,8 +16,49 @@
       content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (ctx.mode.cordova || ctx.mode.capacitor) { %>, viewport-fit=cover<% } %>"
     />
 
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jednaznas.sk/" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://jednaznas.sk/" />
+    <meta property="og:title" content="<%= productName %> - Občianske združenie" />
+    <meta property="og:description" content="<%= productDescription %>" />
+    <meta property="og:image" content="https://jednaznas.sk/favicon.png" />
+    <meta property="og:locale" content="sk_SK" />
+    <meta property="og:site_name" content="JEDNA Z NÁS" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://jednaznas.sk/" />
+    <meta name="twitter:title" content="<%= productName %> - Občianske združenie" />
+    <meta name="twitter:description" content="<%= productDescription %>" />
+    <meta name="twitter:image" content="https://jednaznas.sk/favicon.png" />
+
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png" />
     <link rel="shortcut icon" type="image/png" href="favicon.png" />
+    <link rel="apple-touch-icon" href="favicon.png" />
+
+    <!-- Structured Data / JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Občianske združenie JEDNA Z NÁS",
+      "alternateName": "JEDNA Z NÁS",
+      "url": "https://jednaznas.sk",
+      "logo": "https://jednaznas.sk/favicon.png",
+      "description": "Občianske združenie zamerané na pomoc znevýhodneným skupinám na Slovensku prostredníctvom sociálnej inklúzie, vzdelávania a komunitných projektov.",
+      "email": "jednaznasoz@gmail.com",
+      "foundingDate": "2010",
+      "areaServed": {
+        "@type": "Country",
+        "name": "Slovakia"
+      },
+      "sameAs": []
+    }
+    </script>
   </head>
   <body>
     <!-- quasar:entry-point -->

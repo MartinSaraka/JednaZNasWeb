@@ -1,9 +1,9 @@
 {
-  "name": "jednaZnas",
+  "name": "jedna-z-nas",
   "version": "0.0.1",
-  "description": "jednaZnas",
-  "productName": "jednaZnas",
-  "author": "jednaZnas",
+  "description": "Občianske združenie JEDNA Z NÁS - pomáhame znevýhodneným skupinám na Slovensku prostredníctvom sociálnej inklúzie, vzdelávania a komunitných projektov.",
+  "productName": "JEDNA Z NÁS",
+  "author": "Občianske združenie JEDNA Z NÁS",
   "private": true,
   "scripts": {
     "lint": "eslint --ext .js,.ts,.vue ./",
