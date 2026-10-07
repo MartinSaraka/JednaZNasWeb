@@ -5,9 +5,9 @@
         404
       </div>
 
-      <div class="text-h2" style="opacity:.4">
-        Oops. Nothing here...
-      </div>
+      <h1 class="text-h2 q-my-none" style="opacity:.4">
+        Stránka nebola nájdená
+      </h1>
 
       <q-btn
         class="q-mt-xl"
@@ -15,7 +15,7 @@
         text-color="blue"
         unelevated
         to="/"
-        label="Go Home"
+        label="Späť na úvodnú stránku"
         no-caps
       />
     </div>

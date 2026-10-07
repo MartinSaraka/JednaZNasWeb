@@ -1,16 +1,26 @@
 <template>
   <q-page class="jobs-page q-py-xl">
+    <!-- Povinná publicita EÚ – hneď hore, viditeľná bez posúvania -->
+    <EuFundingBar class="eu-bar q-mx-auto q-mb-md q-px-md" />
+
     <!-- Banner pre projekt -->
     <div class="text-center q-mb-md q-px-md">
       <div class="project-banner q-mx-auto">
-        <div class="text-body1 text-grey-7 q-mb-sm">Pracovné pozície pre projekt</div>
-        <div class="project-link-wrapper" @click="goToProject">
+        <h1 class="text-body1 text-grey-8 q-my-none q-mb-sm">
+          Pracovné pozície pre projekt
+        </h1>
+        <router-link
+          :to="{ name: 'project-detail', params: { slug: 'pinokio' } }"
+          class="project-link-wrapper"
+        >
           <img
             src="~/assets/logo_pinokio.png"
-            alt="PINOKIO"
+            alt="PINOKIO – Podpora integrácie neaktívnych osôb komplexnými a individuálnymi opatreniami"
             class="pinokio-logo-banner"
+            width="503"
+            height="343"
           />
-        </div>
+        </router-link>
       </div>
     </div>
 
@@ -69,11 +79,11 @@
             </div>
             <div class="recruitment-text text-left">
               <div class="text-h6 text-bold text-primary">
-                Primárny nábor do 1.11.2025
+                Hľadáme posily do tímu
               </div>
               <div class="text-body2 text-grey-8 q-mt-xs">
-                Neváhajte nás kontaktovať aj po tomto termíne! Radi sa s vami
-                porozprávame.
+                Projekt beží od 1.11.2025. Ak máte záujem o niektorú z pozícií,
+                pošlite nám životopis – radi sa s vami porozprávame.
               </div>
             </div>
           </div>
@@ -390,7 +400,7 @@
                   unelevated
                   size="md"
                   icon="send"
-                  @click="sendEmail"
+                  :href="mailtoHref"
                   class="full-width contact-btn"
                   style="max-width: 300px"
                 />
@@ -418,7 +428,7 @@
                   unelevated
                   size="md"
                   icon="arrow_forward"
-                  @click="goToContact"
+                  to="/contact"
                   class="full-width contact-btn"
                   style="max-width: 300px"
                 />
@@ -432,53 +442,34 @@
           <div class="text-center q-pt-md">
             <p class="text-body2 text-grey-7">
               <q-icon name="info_outline" class="q-mr-xs" />
-              Projekt trvá <strong>24 mesiacov</strong> v rámci priority
-              <strong>4P4 - Záruka pre mladých</strong>
+              Projekt trvá <strong>24 mesiacov</strong> (1.11.2025 – 31.10.2027)
+              v rámci priority <strong>4P4 Záruka pre mladých</strong>
+              Programu Slovensko.
+            </p>
+            <p class="text-caption text-grey-7 q-mb-none">
+              Osobné údaje uvedené v životopise spracúvame výlučne na účel výberového
+              konania a po jeho skončení ich vymažeme, ak nedáte súhlas s ich ďalším
+              uchovaním.
             </p>
           </div>
         </q-card-section>
       </q-card>
     </section>
 
-    <!-- Text o financovaní a logá -->
-    <section class="text-center q-px-md q-pb-xl q-mt-xl">
-      <div class="q-mb-md">
-        <p class="text-body2 funding-text">
-          Projekt je spolufinancovaný Európskou úniou v rámci Programu Slovensko z Európskeho sociálneho fondu plus (ESF+)
-        </p>
-      </div>
-      <img
-        src="~/assets/3loga.png"
-        alt="Financovanie z EU"
-        class="funding-logos"
-      />
-    </section>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
+import EuFundingBar from 'components/EuFundingBar.vue';
 
-const router = useRouter();
-
-function goToContact() {
-  router.push('/contact');
-}
-
-function sendEmail() {
-  window.location.href =
-    'mailto:jednaznasoz@gmail.com?subject=Záujem o pracovnú pozíciu&body=Dobrý deň,%0D%0A%0D%0AMám záujem o pracovnú pozíciu...';
-}
-
-function goToProject() {
-  router.push({ name: 'project-detail', params: { slug: 'pinokio' } });
-}
+const mailtoHref =
+  'mailto:jednaznasoz@gmail.com?subject=' +
+  encodeURIComponent('Záujem o pracovnú pozíciu – PINOKIO') +
+  '&body=' +
+  encodeURIComponent('Dobrý deň,\n\nmám záujem o pracovnú pozíciu...');
 </script>
 
 <style scoped>
-/* Importovanie animácií */
-@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
-
 .jobs-page {
   width: 100%;
   max-width: 1400px;
@@ -512,20 +503,11 @@ function goToProject() {
   transform: translateY(-2px);
 }
 
-.project-link-text {
-  font-weight: 600;
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.project-link-text:hover {
-  color: #1565c0 !important;
-}
-
 /* Logo PINOKIO v banneri */
+/* Logo projektu nesmie byť väčšie než znak EÚ (Manuál P SK v2.0, kap. 4.6 a 4.7) */
 .pinokio-logo-banner {
-  max-width: 350px;
-  height: auto;
+  height: 72px;
+  width: auto;
   display: block;
   margin: 0 auto;
   cursor: pointer;
@@ -536,21 +518,8 @@ function goToProject() {
   transform: scale(1.05);
 }
 
-/* Text o financovaní */
-.funding-text {
-  color: #424242;
-  font-weight: 500;
-  line-height: 1.8;
-  max-width: 700px;
-  margin: 0 auto;
-}
-
-/* Financujúce logá */
-.funding-logos {
-  max-width: 600px;
-  height: auto;
-  display: block;
-  margin: 1rem auto 0;
+.eu-bar {
+  max-width: 900px;
 }
 
 /* Cieľ projektu */
@@ -768,16 +737,8 @@ function goToProject() {
     padding: 0.75rem 1rem;
   }
 
-  .project-link-text {
-    font-size: 1.1rem;
-  }
-
-  .funding-logos {
-    max-width: 100%;
-  }
-
   .pinokio-logo-banner {
-    max-width: 250px;
+    height: 44px;
   }
 }
 

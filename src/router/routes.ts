@@ -36,11 +36,11 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: '/projects/:slug',
+        path: 'projects/:slug',
         name: 'project-detail',
         component: () => import('pages/ProjectDetailPage.vue'),
         meta: {
-          title: 'Detail projektu - JEDNA Z NÁS',
+          title: 'Projekt - JEDNA Z NÁS',
           description:
             'Podrobné informácie o projekte občianskeho združenia JEDNA Z NÁS.',
         },

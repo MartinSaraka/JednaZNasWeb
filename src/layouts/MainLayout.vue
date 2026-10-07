@@ -4,19 +4,21 @@
     <q-header class="bg-white text-dark q-px-md q-py-sm shadow-1">
       <div class="row items-center no-wrap justify-between" style="width: 100%">
         <!-- 1) Ľavá časť: Logo (klikateľné) -->
-        <div
-          class="row items-center no-wrap"
-          style="cursor: pointer"
-          @click="goTo('/')"
+        <router-link
+          to="/"
+          class="row items-center no-wrap home-link"
+          aria-label="JEDNA Z NÁS – domov"
         >
           <img
             src="~/assets/CestaVon.png"
-            alt="JEDNA Z NÁS"
+            alt=""
+            width="406"
+            height="397"
             style="height: 40px; width: auto"
             class="q-mr-sm"
           />
           <span class="text-h6">JEDNA Z NÁS</span>
-        </div>
+        </router-link>
 
         <!-- 2) Pravá časť: Navigácia -->
         <div class="row items-center no-wrap">
@@ -25,48 +27,55 @@
             class="row items-center no-wrap q-gutter-sm"
             v-if="!$q.screen.lt.md"
           >
-            <q-btn flat label="O nás" class="text-dark" @click="goTo('/')" />
+            <q-btn flat label="O nás" class="text-dark" to="/" exact />
             <q-btn
               flat
               label="Projekty"
               class="text-dark"
-              @click="goTo('/projects')"
+              to="/projects"
             />
             <q-btn
               flat
               label="Pracovné pozície"
               class="text-dark"
-              @click="goTo('/job-positions')"
+              to="/job-positions"
             />
             <q-btn
               flat
               label="Kontakt"
               class="text-dark"
-              @click="goTo('/contact')"
+              to="/contact"
             />
           </div>
 
           <!-- B) Mobil (lt.md) -> q-btn-dropdown -->
           <div v-else>
-            <q-btn-dropdown flat round icon="menu" color="dark" no-caps>
+            <q-btn-dropdown
+              flat
+              round
+              icon="menu"
+              color="dark"
+              no-caps
+              aria-label="Menu"
+            >
               <q-list style="min-width: 180px">
                 <!-- O nás -->
-                <q-item clickable v-ripple @click="goTo('/')">
+                <q-item clickable v-ripple to="/" exact>
                   <q-item-section>O nás</q-item-section>
                 </q-item>
 
                 <!-- Projekty -->
-                <q-item clickable v-ripple @click="goTo('/projects')">
+                <q-item clickable v-ripple to="/projects">
                   <q-item-section>Projekty</q-item-section>
                 </q-item>
 
                 <!-- Pracovné pozície -->
-                <q-item clickable v-ripple @click="goTo('/job-positions')">
+                <q-item clickable v-ripple to="/job-positions">
                   <q-item-section>Pracovné pozície</q-item-section>
                 </q-item>
 
                 <!-- Kontakt -->
-                <q-item clickable v-ripple @click="goTo('/contact')">
+                <q-item clickable v-ripple to="/contact">
                   <q-item-section>Kontakt</q-item-section>
                 </q-item>
               </q-list>
@@ -83,26 +92,22 @@
 
     <!-- Pätička -->
     <q-footer class="bg-grey-1 text-dark text-center q-pa-md">
-      IČO: 42036780 | jednaznasoz@gmail.com | ©
-      {{ new Date().getFullYear() }} OZ JEDNA Z NÁS. Všetky práva
-      vyhradené.
+      Občianske združenie JEDNA Z NÁS | IČO: 42036780 |
+      <a href="mailto:jednaznasoz@gmail.com" class="text-dark">jednaznasoz@gmail.com</a>
+      | © {{ new Date().getFullYear() }} OZ JEDNA Z NÁS. Všetky práva vyhradené.
     </q-footer>
   </q-layout>
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 
 const $q = useQuasar();
-const router = useRouter();
-
-function goTo(path: string) {
-  router.push(path);
-}
 </script>
 
 <style scoped>
-/* Ďalšie voliteľné úpravy headeru, loga atď. */
-/* Napr. :hover efekty na logo, atď. */
+.home-link {
+  color: inherit;
+  text-decoration: none;
+}
 </style>

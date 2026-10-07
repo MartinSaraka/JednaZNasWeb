@@ -1,268 +1,350 @@
 <template>
   <q-page class="projects-page q-py-xl q-px-md">
-    <!-- Nadpis a úvod -->
-    <div class="text-center q-mb-xl">
-      <h1 class="text-h4 text-bold">
-        Prehľad našich kľúčových iniciatív a projektov
-      </h1>
-    </div>
+    <div class="projects-inner">
+      <header class="page-header">
+        <h1 class="page-title">Naše projekty a iniciatívy</h1>
+        <p class="page-subtitle">
+          Prehľad projektov, ktorými pomáhame ľuďom zo znevýhodneného prostredia
+        </p>
+      </header>
 
-    <!-- Grid s kartami projektov (row-equal pre rovnakú výšku) -->
-    <div class="row justify-center row-equal">
-      <!-- Každý projekt -> karta -->
-      <div
-        v-for="project in projects"
+      <!-- Aktuálne realizovaný projekt – zvýraznený -->
+      <article
+        v-for="project in activeProjects"
         :key="project.slug"
-        class="col-12 col-sm-6 col-md-4 d-flex q-px-sm q-py-md"
+        class="featured-card"
       >
-        <q-card
-          class="project-card my-card cursor-pointer"
-          :class="{ 'active-project': project.slug === 'pinokio' }"
-          flat
-          @click="goToProject(project.slug)"
-        >
-          <!-- Badge pre aktívny projekt -->
-          <div v-if="project.slug === 'pinokio'" class="active-badge">
-            <q-icon name="star" size="16px" class="q-mr-xs" />
-            <span>Aktuálne aktívny projekt</span>
-          </div>
-
-          <!-- Obsah karty (len názov, popis, border) -->
-          <q-card-section class="card-content text-left">
-            <div class="text-h6 text-primary q-mb-xs">
-              {{ project.name }}
-            </div>
-            <p class="text-body2 card-purpose q-mt-xs">
-              {{ project.shortPurpose }}
+        <span class="featured-badge">
+          <q-icon name="star" size="16px" />
+          Aktuálne realizovaný projekt
+        </span>
+        <div class="featured-body">
+          <img
+            v-if="project.slug === 'pinokio'"
+            src="~/assets/logo_pinokio.png"
+            alt=""
+            class="featured-logo"
+            width="503"
+            height="343"
+          />
+          <div class="featured-text">
+            <h2 class="featured-title">
+              <!-- ::after roztiahne odkaz na celú kartu -->
+              <router-link
+                :to="{ name: 'project-detail', params: { slug: project.slug } }"
+                class="stretched-link"
+              >
+                {{ project.name }}
+              </router-link>
+            </h2>
+            <p class="featured-purpose">{{ project.shortPurpose }}</p>
+            <p v-if="project.eu" class="featured-meta">
+              <q-icon name="event" size="18px" />
+              {{ project.eu.realizationPeriod }}
             </p>
-          </q-card-section>
-        </q-card>
+            <span class="more-link" aria-hidden="true">
+              Viac o projekte
+              <q-icon name="arrow_forward" size="18px" />
+            </span>
+          </div>
+        </div>
+        <!-- Povinná publicita EÚ pri informácii o projekte -->
+        <EuFundingBar v-if="project.eu" compact class="featured-eu" />
+      </article>
+
+      <h2 class="section-title">Ďalšie projekty</h2>
+
+      <div class="projects-grid">
+        <router-link
+          v-for="project in otherProjects"
+          :key="project.slug"
+          :to="{ name: 'project-detail', params: { slug: project.slug } }"
+          class="project-card"
+        >
+          <div class="icon-circle" :class="`text-${project.iconColor}`">
+            <q-icon :name="project.icon" size="30px" />
+          </div>
+          <h3 class="card-title">{{ project.name }}</h3>
+          <p class="card-purpose">{{ project.shortPurpose }}</p>
+          <span class="more-link">
+            Viac o projekte
+            <q-icon name="arrow_forward" size="18px" />
+          </span>
+        </router-link>
       </div>
     </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import EuFundingBar from 'components/EuFundingBar.vue';
+import { projects } from 'src/data/projects';
 
-interface Project {
-  slug: string;
-  name: string;
-  shortPurpose: string;
-  description: string;
-}
-
-// Router
-const router = useRouter();
-
-// 8 projektov (bez ikon), plné texty v "description"
-const projects = ref<Project[]>([
-  {
-    slug: 'hodnota-nad-bohatstvom',
-    name: 'Hodnota nad bohatstvom',
-    shortPurpose: 'Výchova k šťastiu a životným hodnotám',
-    description: `Namiesto toho, aby sme deti učili túžiť po bohatstve, je dôležité ich viesť k poznaniu,
-že skutočná hodnota života nespočíva v materiálnych veciach, ale vo vnútornom šťastí, vďačnosti a vzťahoch.
-V tomto projekte sme organizovali workshopy a besedy pre rodiny aj školy, kde sme vysvetľovali,
-že pravé šťastie pramení z empatických vzťahov a každodennej radosti, nie z majetku.
-Učili sme žiakov rozvíjať emocionálnu inteligenciu, aplikovať cvičenia vďačnosti
-a tým znižovať tlak konzumného sveta. Táto výchova k jednoduchosti a empatii
-prispieva k duševnej rovnováhe a k zdravším rodinným hodnotám.`,
-  },
-  {
-    slug: 'zdravie-na-tanieri',
-    name: 'Zdravie na tanieri',
-    shortPurpose: 'Vzťah výživy a životnej kvality',
-    description: `Strava je základným pilierom sociálneho zdravia a kvality života.
-V rámci tejto iniciatívy sme usporiadali praktické kurzy varenia a diskusie s rodinami
-o dostupnosti kvalitných potravín. Pomáhali sme pri plánovaní jedálnička tak,
-aby zdravé jedlo nebolo luxusom, ale bežnou súčasťou domácností.
-Učili sme účastníkov, ako správne zložená strava môže predchádzať civilizačným ochoreniam
-(obezita, cukrovka, srdcovo-cievne ťažkosti) a prispievať k fyzickej pohode aj
-dlhodobému zlepšeniu kvality života.`,
-  },
-  {
-    slug: 'sila-lasky',
-    name: 'Sila lásky',
-    shortPurpose: 'Spojitosť medzi vernosťou a sociálnymi vzťahmi',
-    description: `Vďaka diskusným stretnutiam a besedám sme ukázali, aký význam má dôvera,
-vernosť a vzájomná úcta pri budovaní stabilných rodín a komunít.
-Láska a priateľstvo nie sú len osobné emócie, ale silné sociálne piliere,
-ktoré ovplyvňujú psychické zdravie a pocit spolupatričnosti.
-Učili sme páry aj jednotlivcov, že pri partnerských krízach je dôležité
-hľadať riešenia namiesto rýchleho úniku. Tým predchádzame izolácii,
-osamelosti a podporujeme silnejšie komunity.`,
-  },
-  {
-    slug: 'spolu-sme-silnejsi',
-    name: 'Spolu sme silnejší',
-    shortPurpose: 'Sociálna spolupráca ako cesta k pokroku',
-    description: `Jednotlivec môže dosiahnuť rýchly úspech, ale skutočná sila spoločnosti
-vzniká zo spolupráce a spolupatričnosti. V tomto projekte sme usporiadali dielne tímovej práce,
-kde sme ľudí viedli k spoločnému riešeniu lokálnych problémov – napríklad
-úprava komunitného ihriska, pomoc starším či znevýhodneným.
-Takáto solidarita a kolektívne úsilie prekonávajú systémové problémy
-(chudobu, nerovnosť) a prinášajú inovatívne nápady pre celé komunity.`,
-  },
-  {
-    slug: 'peer-skupiny-silne-dievcata',
-    name: 'Peer skupiny – Silné dievčatá',
-    shortPurpose: 'Práca s mládežou, hlavne s mladými dievčatami',
-    description: `Vytvárame peer skupiny pre dievčatá v tínedžerskom veku,
-kde si navzájom pomáhajú v otázkach zdravia, sebaúcty a osobnostného rastu.
-Pod vedením mentorky rozoberajú témy ako bezpečnosť, vzťahy, kariérny rozvoj
-a učia sa lepšej komunikácii. Tým posilňujú svoju sebadôveru,
-vznikajú pevné priateľstvá a podporujú základné hodnoty pre kvalitný život
-a budúcu integráciu do spoločnosti.`,
-  },
-  {
-    slug: 'sanca-na-lepsi-zivot',
-    name: 'Šanca na lepší a zdravší život',
-    shortPurpose: 'Osveta o psychomotorickom vývine detí a zlepšenie podmienok',
-    description: `Projekt sa orientuje na rodiny s malými deťmi, kde prebiehajú prednášky
-o psychomotorickom vývine a praktické ukážky cvičení na podporu správneho rastu detí.
-Spolupracujeme s terénnymi pracovníkmi, aby sme rodinám v núdzi mohli
-poskytnúť základnú pomoc (plienky, výživové doplnky, hračky na rozvoj).
-Tým zlepšujeme životné vyhliadky rodín a prispievame k zdravšej komunite
-s dobrými štartovacími podmienkami pre deti.`,
-  },
-  {
-    slug: 'cisty-domov',
-    name: 'Čistý domov',
-    shortPurpose: 'Zvýšenie povedomia o dôležitosti čistoty a poriadku',
-    description: `Projekt Čistý domov sa zameriava na prednášky a praktické workshopy
-v komunitách, kde ľuďom vysvetľujeme, prečo je dôležité udržiavať čistotu
-v domácnosti aj v okolí domu. Pomáhame organizovať dobrovoľnícke
-upratovacie akcie, rozdávame letáky o udržateľných čistiacich prostriedkoch.
-Tým prispievame k zlepšeniu hygienických návykov, znižujeme riziko chorôb
-a zvyšujeme celkovú kvalitu života v komunite.`,
-  },
-  {
-    slug: 'sikovne-ruky',
-    name: 'Šikovné ruky',
-    shortPurpose: 'Zapojenie žien na materskej do tvorivých aktivít',
-    description: `Tento program oslovuje ženy na materskej a rodičovskej dovolenke,
-aby sa zapojili do rôznych dielní a workshopov (šitie, ručné práce, výroba suvenírov).
-Rozvíjajú tak praktické zručnosti, ktoré môžu využiť pri hľadaní zamestnania
-alebo na rozbehnutie drobného podnikania. Stretávajú sa, vymieňajú si nápady
-a navzájom sa motivujú. Tým získavajú sebadôveru, sociálnu aj finančnú podporu
-a rozširujú obzory pre budúce pracovné príležitosti.`,
-  },
-  {
-    slug: 'pinokio',
-    name: 'PINOKIO ',
-    shortPurpose:
-      'Podpora integrácie neaktívnych osôb komplexnými a individuálnymi opatreniami',
-    description: `Projekt je zameraný na podporu neaktívnych mladých osôb do 30 rokov (NEET), ktoré nie sú zamestnané, nie sú vo výcviku, nevzdelávajú sa a ani nie sú evidované na úrade práce. Jeho hlavným cieľom je ich priblíženie k trhu práce prostredníctvom cielenej pomoci v teréne.
-
-Realizuje sa v najmenej rozvinutých okresoch: Košice-okolie, Michalovce, Stropkov, Svidník, Trebišov, Humenné a Vranov nad Topľou na obdobie 24 mesiacov od 1.11.2025.
-
-Aktivity projektu sú navrhnuté tak, aby účinne motivovali a podporovali jednotlivcov pri hľadaní pracovného uplatnenia a vytvárali podmienky pre ich dlhodobú pracovnú integráciu. Tím skúsených pracovníkov zabezpečí efektívnu implementáciu jednotlivých aktivít.
-
-Našou ambíciou je vytvoriť inkluzívnejší a dostupnejší trh práce, kde každý dostane reálnu príležitosť na pracovné uplatnenie. Každý človek si zaslúži šancu na dôstojný život a pracovné uplatnenie, a preto chceme týmto projektom vytvoriť podmienky, ktoré im umožnia naplno využiť svoj potenciál a aktívne sa zapojiť do spoločnosti.`,
-  },
-]);
-
-function goToProject(slug: string) {
-  router.push({ name: 'project-detail', params: { slug } });
-}
+const activeProjects = projects.filter((p) => p.active);
+const otherProjects = projects.filter((p) => !p.active);
 </script>
 
 <style scoped>
 .projects-page {
-  max-width: 1200px;
+  background: linear-gradient(to bottom, #f5f8fc 0%, #ffffff 480px);
+}
+
+.projects-inner {
+  max-width: 1100px;
   margin: 0 auto;
-  background-color: #fefefe;
-  border-radius: 8px;
-  min-height: 80vh;
 }
 
-/* Rovnako vysoké karty v jednom riadku */
-.row-equal {
-  display: flex;
-  flex-wrap: wrap;
-}
-.row-equal > div {
-  display: flex;
-  align-items: stretch;
+/* Hlavička */
+.page-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
 }
 
-/* Každá karta */
-.my-card {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border: 1px solid #ccc; /* Jednoduchý okraj */
-  border-radius: 8px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  background-color: #fff;
+.page-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #1a1a1a;
+  margin: 0 0 0.5rem;
+}
+
+.page-subtitle {
+  font-size: 1.1rem;
+  color: #555;
+  margin: 0;
+}
+
+/* Zvýraznený projekt */
+.featured-card {
   position: relative;
-  overflow: hidden;
-}
-.my-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
-}
-
-/* Aktívny projekt - zvýraznenie */
-.active-project {
+  display: block;
+  cursor: pointer;
+  max-width: 900px;
+  margin: 0 auto 3rem;
+  padding: 2.5rem 2rem 1rem;
+  background: #fff;
   border: 2px solid #1976d2;
-  box-shadow: 0 2px 12px rgba(25, 118, 210, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 6px 24px rgba(25, 118, 210, 0.12);
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.active-project:hover {
-  box-shadow: 0 6px 20px rgba(25, 118, 210, 0.25);
+.featured-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 32px rgba(25, 118, 210, 0.2);
 }
 
-/* Badge pre aktívny projekt */
-.active-badge {
+.featured-badge {
   position: absolute;
   top: 0;
-  right: 0;
-  background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
-  color: white;
-  padding: 0.4rem 0.75rem;
-  font-size: 0.75rem;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  background: #1976d2;
+  color: #fff;
+  font-size: 0.85rem;
   font-weight: 600;
-  border-bottom-left-radius: 8px;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.35);
+}
+
+.featured-body {
   display: flex;
   align-items: center;
-  box-shadow: 0 2px 6px rgba(25, 118, 210, 0.3);
+  justify-content: center;
+  gap: 2rem;
+}
+
+/* Logo projektu nesmie byť väčšie než znak EÚ (Manuál P SK v2.0, kap. 4.6 a 4.7) */
+.featured-logo {
+  height: 72px;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.featured-text {
+  max-width: 560px;
+}
+
+.featured-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #0d47a1;
+  margin: 0 0 0.35rem;
+  line-height: 1.3;
+}
+
+.featured-purpose {
+  font-size: 1.05rem;
+  color: #333;
+  margin: 0 0 0.5rem;
+  line-height: 1.5;
+}
+
+.featured-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #555;
+  margin: 0 0 0.75rem;
+}
+
+.stretched-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.stretched-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+}
+
+/* Odkaz na eurofondy.gov.sk musí ostať klikateľný nad roztiahnutým odkazom */
+.featured-eu {
+  position: relative;
   z-index: 1;
+  margin-top: 1.25rem;
+  border-top: 1px solid #e3e8ef;
+  border-radius: 0;
 }
 
-/* Obsah v karte */
-.card-content {
-  padding: 1rem;
+/* Ďalšie projekty */
+.section-title {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 1.5rem;
 }
 
-/* Texty */
+/* Flex namiesto gridu – neúplný posledný rad sa vycentruje */
+.projects-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.project-card {
+  flex: 0 1 calc((100% - 3rem) / 3);
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.75rem 1.5rem 1.5rem;
+  background: #fff;
+  border: 1px solid #e3e8ef;
+  border-radius: 14px;
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  border-color: #90caf9;
+  box-shadow: 0 8px 24px rgba(13, 71, 161, 0.1);
+}
+
+.featured-card:focus-within,
+.project-card:focus-visible {
+  outline: 3px solid #1976d2;
+  outline-offset: 3px;
+}
+
+.icon-circle {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 1rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-circle::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.12;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #0d47a1;
+  margin: 0 0 0.5rem;
+}
+
 .card-purpose {
-  margin-top: 4px;
-  font-size: 0.95rem;
+  flex: 1;
+  color: #555;
+  line-height: 1.55;
+  margin: 0 0 1rem;
 }
 
-/* Dve fotky side-by-side (desktop), stack na mobile */
-.two-photos-row {
-  max-width: 1000px;
-  margin: 2rem auto 0 auto; /* center */
-}
-.side-photo {
-  border-radius: 8px;
-  object-fit: cover;
+.more-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 600;
+  color: #1976d2;
 }
 
-/* Responsivita pre mobily */
-@media (max-width: 600px) {
-  .active-badge {
-    font-size: 0.65rem;
-    padding: 0.3rem 0.6rem;
+.project-card:hover .more-link,
+.featured-card:hover .more-link {
+  text-decoration: underline;
+}
+
+/* Responzivita */
+@media (max-width: 900px) {
+  .project-card {
+    flex-basis: calc((100% - 1.5rem) / 2);
+  }
+}
+
+@media (max-width: 700px) {
+  .project-card {
+    flex-basis: 100%;
   }
 
-  .active-badge .q-icon {
-    font-size: 14px;
+  .page-title {
+    font-size: 1.6rem;
+  }
+
+  .featured-card {
+    padding: 2.25rem 1rem 0.5rem;
+  }
+
+  .featured-body {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .featured-logo {
+    height: 44px;
+  }
+
+  .featured-title {
+    font-size: 1.35rem;
+  }
+
+  .featured-meta {
+    justify-content: center;
   }
 }
 </style>

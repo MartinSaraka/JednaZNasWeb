@@ -16,14 +16,35 @@
     <!-- Základné info (IČO, email, atď.) -->
     <div class="info-wrapper text-center q-my-xl">
       <p class="text-body1 q-my-sm">
-        Občianske Združenie JEDNA Z NÁS<br />
+        Občianske združenie JEDNA Z NÁS<br />
         IČO: 42036780
       </p>
       <p class="text-body1 q-my-sm">
         Email: <strong>jednaznasoz@gmail.com</strong><br />
       </p>
-      <!-- Voliteľne aj adresa, telefónne číslo... -->
     </div>
+
+    <!-- Kontaktná dostupnosť – projekt PINOKIO -->
+    <section class="hours-wrapper q-mx-auto q-my-xl" aria-labelledby="hours-title">
+      <h2 id="hours-title" class="text-h6 text-primary text-center q-mt-none q-mb-xs">
+        Kontaktná dostupnosť – projekt PINOKIO
+      </h2>
+      <p class="text-center text-grey-8 q-mb-md">Kód projektu: 401404D511</p>
+      <table class="hours-table">
+        <tbody>
+          <tr v-for="day in days" :key="day">
+            <th scope="row">{{ day }}</th>
+            <td>8:00 – 17:00</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="text-center text-body1 q-mt-md q-mb-xs">
+        Kontaktná osoba: <strong>Mgr. Mária Saraková</strong>
+      </p>
+      <p class="text-center text-body1 q-my-none">
+        Telefón: <a href="tel:+421918371861"><strong>+421 918 371 861</strong></a>
+      </p>
+    </section>
 
     <!-- Tlačidlo "Napísať email" -->
     <div class="text-center">
@@ -38,6 +59,8 @@
 </template>
 
 <script setup lang="ts">
+const days = ['Pondelok', 'Utorok', 'Streda', 'Štvrtok', 'Piatok'];
+
 // Jednoduchá funkcia na otvorenie mailto: odkazu
 function openEmail() {
   // Môžeš pridať subject a body:
@@ -75,6 +98,27 @@ function openEmail() {
 .info-wrapper {
   color: #555;
   /* Môžeš pridať border, tieň, atď. */
+}
+
+.hours-wrapper {
+  max-width: 420px;
+  padding: 0 1rem;
+}
+
+.hours-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.hours-table th,
+.hours-table td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: left;
+}
+
+.hours-table td {
+  text-align: right;
 }
 
 .contact-btn {

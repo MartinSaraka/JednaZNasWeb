@@ -1,4 +1,5 @@
 import { boot } from 'quasar/wrappers';
+import { findProject } from 'src/data/projects';
 
 // Default SEO values
 const defaultTitle = 'JEDNA Z NÁS - Občianske združenie';
@@ -43,8 +44,19 @@ function updateCanonical(url: string) {
 export default boot(({ router }) => {
   router.afterEach((to) => {
     // Get meta from route or use defaults
-    const title = (to.meta.title as string) || defaultTitle;
-    const description = (to.meta.description as string) || defaultDescription;
+    let title = (to.meta.title as string) || defaultTitle;
+    let description = (to.meta.description as string) || defaultDescription;
+
+    // Detail projektu – titulok a popis podľa konkrétneho projektu
+    if (to.name === 'project-detail') {
+      const project = findProject(to.params.slug as string);
+      if (project) {
+        title = `${project.name} – Projekty – JEDNA Z NÁS`;
+        description = project.eu
+          ? `${project.eu.fullName}. Projekt je spolufinancovaný Európskou úniou v rámci Programu Slovensko z ESF+.`
+          : `${project.name}: ${project.shortPurpose}.`;
+      }
+    }
     const path = to.path === '/' ? '' : to.path;
     const fullUrl = `${siteUrl}${path}`;
 
@@ -66,5 +78,8 @@ export default boot(({ router }) => {
 
     // Update canonical URL
     updateCanonical(fullUrl);
+
+    // Stránku 404 neindexovať
+    updateMetaTag('robots', to.matched.length && to.name ? 'index, follow' : 'noindex');
   });
 });

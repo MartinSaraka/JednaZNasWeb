@@ -1,531 +1,439 @@
 <template>
-  <q-page class="project-detail-page q-py-xl q-px-md">
-    <div class="detail-container row justify-center">
-      <!-- Ľavý stĺpec (ikona, názov, subtitul) -->
-      <div class="col-12 col-md-4 detail-left q-pb-md">
-        <!-- Logo pre PINOKIO -->
-        <div v-if="project?.slug === 'pinokio'" class="icon-box">
-          <img
-            src="~/assets/logo_pinokio.png"
-            alt="PINOKIO"
-            class="pinokio-logo"
-          />
+  <q-page v-if="project" class="project-detail-page q-py-lg q-px-md">
+    <div class="detail-column">
+      <!-- Povinná publicita EÚ – hneď hore, viditeľná bez posúvania -->
+      <EuFundingBar v-if="eu" class="q-mb-lg" />
+
+      <!-- Hlavička projektu – vycentrovaná -->
+      <header class="detail-header">
+        <img
+          v-if="project.slug === 'pinokio'"
+          src="~/assets/logo_pinokio.png"
+          alt="Logo projektu PINOKIO"
+          class="pinokio-logo"
+          width="503"
+          height="343"
+        />
+        <div v-else class="icon-circle" :class="`text-${project.iconColor}`">
+          <q-icon :name="project.icon" size="44px" />
         </div>
-        <!-- Ikona pre ostatné projekty -->
-        <div v-else class="icon-box">
-          <q-icon
-            :name="project?.icon"
-            :color="project?.iconColor"
-            size="60px"
-            class="detail-icon"
-          />
-        </div>
-        <h2 class="text-h6 text-primary detail-title q-mt-md">
-          {{ project?.name }}
-        </h2>
-        <p class="text-subtitle2 text-grey detail-subtitle">
-          {{ project?.shortPurpose }}
+        <h1 class="detail-title">
+          {{ eu ? eu.fullName : project.name }}
+        </h1>
+        <p class="detail-subtitle">
+          {{ eu ? `Kód projektu: ${eu.projectCode}` : project.shortPurpose }}
         </p>
-      </div>
-
-      <!-- Pravý stĺpec (text) -->
-      <div class="col-12 col-md-8 detail-right">
-        <!-- Špeciálne formátovanie pre PINOKIO -->
-        <div v-if="project?.slug === 'pinokio'" class="pinokio-detail">
-          <!-- Hlavný popis -->
-          <div class="detail-section">
-            <div class="section-header">
-              <q-icon name="flag" color="primary" size="24px" class="q-mr-sm" />
-              <span class="text-h6 text-primary">Cieľ projektu</span>
-            </div>
-            <p class="section-text">
-              Projekt je zameraný na podporu neaktívnych mladých osôb do 30
-              rokov (NEET), ktoré nie sú zamestnané, nie sú vo výcviku,
-              nevzdelávajú sa a ani nie sú evidované na úrade práce. Jeho
-              hlavným cieľom je ich priblíženie k trhu práce prostredníctvom
-              cielenej pomoci v teréne.
-            </p>
-          </div>
-
-          <!-- Realizácia -->
-          <div class="detail-section">
-            <div class="section-header">
-              <q-icon
-                name="place"
-                color="orange-7"
-                size="24px"
-                class="q-mr-sm"
-              />
-              <span class="text-h6 text-grey-8">Realizácia projektu</span>
-            </div>
-            <p class="section-text">
-              <strong>Okresy:</strong> Košice-okolie, Michalovce, Stropkov,
-              Svidník, Trebišov, Humenné a Vranov nad Topľou
-            </p>
-            <p class="section-text">
-              <strong>Trvanie:</strong> 24 mesiacov od 1.11.2025
-            </p>
-          </div>
-
-          <!-- Identifikácia projektu -->
-          <div class="detail-section">
-            <div class="section-header">
-              <q-icon name="info" color="primary" size="24px" class="q-mr-sm" />
-              <span class="text-h6 text-grey-8">Identifikácia projektu</span>
-            </div>
-            <div class="project-info-grid">
-              <div class="info-item">
-                <span class="info-label">Kód projektu:</span>
-                <span class="info-value">401404E401</span>
-              </div>
-              <div class="info-item">
-                <span class="info-label">Žiadosť o NFP:</span>
-                <span class="info-value">NFP401404D511</span>
-              </div>
-              <div class="info-item">
-                <span class="info-label">Programové obdobie:</span>
-                <span class="info-value">01.11.2025 – 31.10.2027</span>
-              </div>
-              <div class="info-item">
-                <span class="info-label">Program:</span>
-                <span class="info-value">Program Slovensko</span>
-              </div>
-              <div class="info-item">
-                <span class="info-label">Výzva:</span>
-                <span class="info-value">PSK-MPSVR-034-2025-DV-ESF+</span>
-              </div>
-              <div class="info-item">
-                <span class="info-label">Názov výzvy:</span>
-                <span class="info-value">2N – Nezamestnaní a neaktívni na ceste na trh práce</span>
-              </div>
-              <div class="info-item">
-                <span class="info-label">Adresa:</span>
-                <span class="info-value">Občianske Združenie JEDNA Z NÁS v budove "Jedáleň s kuchyňou", Soľ 7, 094 35</span>
-              </div>
-              <div class="info-item highlight-item">
-                <span class="info-label">Financovanie z EU:</span>
-                <span class="info-value">657 046,46 €</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Aktivity -->
-          <div class="detail-section">
-            <div class="section-header">
-              <q-icon
-                name="trending_up"
-                color="positive"
-                size="24px"
-                class="q-mr-sm"
-              />
-              <span class="text-h6 text-grey-8">Aktivity a prínos</span>
-            </div>
-            <p class="section-text">
-              Aktivity projektu sú navrhnuté tak, aby účinne motivovali a
-              podporovali jednotlivcov pri hľadaní pracovného uplatnenia a
-              vytvárali podmienky pre ich dlhodobú pracovnú integráciu. Tím
-              skúsených pracovníkov zabezpečí efektívnu implementáciu
-              jednotlivých aktivít.
-            </p>
-          </div>
-
-          <!-- Vízia -->
-          <div class="detail-section vision-section">
-            <div class="section-header">
-              <q-icon
-                name="lightbulb"
-                color="amber-7"
-                size="24px"
-                class="q-mr-sm"
-              />
-              <span class="text-h6 text-grey-8">Naša vízia</span>
-            </div>
-            <p class="section-text">
-              Našou ambíciou je vytvoriť inkluzívnejší a dostupnejší trh práce,
-              kde každý dostane reálnu príležitosť na pracovné uplatnenie. Každý
-              človek si zaslúži šancu na dôstojný život a pracovné uplatnenie, a
-              preto chceme týmto projektom vytvoriť podmienky, ktoré im umožnia
-              naplno využiť svoj potenciál a aktívne sa zapojiť do spoločnosti.
-            </p>
-          </div>
-
-          <!-- Plagát projektu -->
-          <div class="text-center q-mt-xl">
-            <img
-              src="~/assets/plagat.png"
-              alt="PINOKIO plagát"
-              class="plagat-image plagat-thumbnail"
-              @click="showPlagatDialog = true"
-            />
-            <div class="text-caption text-grey-7 q-mt-sm">
-              Kliknite pre zväčšenie
-            </div>
-          </div>
-
-          <!-- Text o financovaní -->
-          <div class="text-center q-mt-xl q-px-md">
-            <p class="text-body2 funding-text">
-              Projekt je spolufinancovaný Európskou úniou v rámci Programu Slovensko z Európskeho sociálneho fondu plus (ESF+)
-            </p>
-          </div>
-
-          <!-- Financujúce logá -->
-          <div class="text-center q-mt-md">
-            <img
-              src="~/assets/3loga.png"
-              alt="Financovanie z EU"
-              class="funding-logos"
-            />
-          </div>
-
-          <!-- Dialog pre plagát -->
-          <q-dialog v-model="showPlagatDialog">
-            <q-card class="plagat-dialog">
-              <q-card-section class="row items-center q-pb-none">
-                <div class="text-h6">PINOKIO - Plagát projektu</div>
-                <q-space />
-                <q-btn icon="close" flat round dense v-close-popup />
-              </q-card-section>
-              <q-card-section>
-                <img
-                  src="~/assets/plagat.png"
-                  alt="PINOKIO plagát"
-                  class="plagat-full-size"
-                />
-              </q-card-section>
-            </q-card>
-          </q-dialog>
+        <div v-if="eu" class="detail-chips">
+          <span class="chip">
+            <q-icon name="event" size="18px" />
+            {{ eu.realizationPeriod }}
+          </span>
+          <span class="chip">
+            <q-icon name="groups" size="18px" />
+            Mladí ľudia do 30 rokov (NEET)
+          </span>
+          <span class="chip">
+            <q-icon name="place" size="18px" />
+            {{ eu.districts.length }} okresov východného Slovenska
+          </span>
         </div>
+      </header>
 
-        <!-- Formátovanie pre ostatné projekty -->
-        <div v-else class="formatted-project-detail">
+      <!-- Projekt spolufinancovaný z fondov EÚ -->
+      <template v-if="eu">
+        <section class="detail-section">
+          <h2 class="section-header">
+            <q-icon name="flag" color="primary" size="26px" />
+            Cieľ projektu
+          </h2>
+          <p class="section-text">{{ project.description }}</p>
+          <ul class="section-list">
+            <li v-for="goal in eu.goals" :key="goal">{{ goal }}</li>
+          </ul>
+        </section>
+
+        <section class="detail-section">
+          <h2 class="section-header">
+            <q-icon name="groups" color="primary" size="26px" />
+            Cieľová skupina
+          </h2>
+          <p class="section-text">{{ eu.targetGroup }}</p>
+        </section>
+
+        <section class="detail-section accent-orange">
+          <h2 class="section-header">
+            <q-icon name="place" color="orange-7" size="26px" />
+            Kde projekt realizujeme
+          </h2>
+          <div class="district-list">
+            <span v-for="district in eu.districts" :key="district" class="district">
+              {{ district }}
+            </span>
+          </div>
+          <p class="section-text text-center q-mt-md">
+            <strong>Obdobie realizácie:</strong> {{ eu.realizationPeriod }}
+          </p>
+        </section>
+
+        <section class="detail-section">
+          <h2 class="section-header">
+            <q-icon name="checklist" color="primary" size="26px" />
+            Hlavné aktivity
+          </h2>
+          <ul class="section-list">
+            <li v-for="activity in eu.activities" :key="activity">
+              {{ activity }}
+            </li>
+          </ul>
+        </section>
+
+        <section class="detail-section accent-green">
+          <h2 class="section-header">
+            <q-icon name="trending_up" color="positive" size="26px" />
+            Očakávané výsledky
+          </h2>
           <div
-            v-for="(paragraph, index) in formattedDescription"
-            :key="index"
-            class="detail-paragraph"
+            v-if="eu.expectedResultsNumbers.length"
+            class="results-grid q-mb-md"
           >
-            <p class="section-text">{{ paragraph }}</p>
+            <div
+              v-for="item in eu.expectedResultsNumbers"
+              :key="item.label"
+              class="result-item"
+            >
+              <span class="result-value">{{ item.value }}</span>
+              <span class="result-label">{{ item.label }}</span>
+            </div>
           </div>
-        </div>
+          <ul class="section-list">
+            <li v-for="result in eu.expectedResultsText" :key="result">
+              {{ result }}
+            </li>
+          </ul>
+        </section>
 
-        <div class="buttons-wrapper">
-          <q-btn
-            v-if="project?.slug === 'pinokio'"
-            label="Zobraziť pracovné pozície"
-            color="orange-7"
-            class="q-mr-sm"
-            icon="work"
-            unelevated
-            @click="goToJobPositions"
-          />
-          <q-btn label="Späť na projekty" color="primary" @click="goBack" />
-        </div>
+        <section class="detail-section">
+          <h2 class="section-header">
+            <q-icon name="info" color="primary" size="26px" />
+            Identifikácia projektu
+          </h2>
+          <dl class="info-table">
+            <div v-for="row in infoRows" :key="row.label" class="info-row">
+              <dt>{{ row.label }}</dt>
+              <dd>
+                <a v-if="row.href" :href="row.href">{{ row.value }}</a>
+                <template v-else>{{ row.value }}</template>
+              </dd>
+            </div>
+            <div class="info-row info-row-highlight">
+              <dt>Zazmluvnená výška NFP</dt>
+              <dd>{{ eu.contractedNfp }}</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="detail-section accent-amber vision-section">
+          <h2 class="section-header">
+            <q-icon name="lightbulb" color="amber-8" size="26px" />
+            Naša vízia
+          </h2>
+          <p class="section-text text-center">
+            Našou ambíciou je vytvoriť inkluzívnejší a dostupnejší trh práce,
+            kde každý dostane reálnu príležitosť na pracovné uplatnenie. Každý
+            človek si zaslúži šancu na dôstojný život a pracovné uplatnenie, a
+            preto chceme týmto projektom vytvoriť podmienky, ktoré im umožnia
+            naplno využiť svoj potenciál a aktívne sa zapojiť do spoločnosti.
+          </p>
+        </section>
+
+        <!-- Plagáty projektu -->
+        <section class="posters-section">
+          <h2 class="section-header">
+            <q-icon name="image" color="primary" size="26px" />
+            Plagáty projektu
+          </h2>
+          <div class="posters-row">
+            <figure v-for="poster in posters" :key="poster.src" class="poster">
+              <button
+                type="button"
+                class="plagat-button"
+                :aria-label="`Zväčšiť: ${poster.title}`"
+                @click="openPoster(poster)"
+              >
+                <img
+                  :src="poster.src"
+                  :alt="poster.alt"
+                  class="plagat-thumbnail"
+                  width="1054"
+                  height="1492"
+                  loading="lazy"
+                />
+              </button>
+              <figcaption class="text-caption text-grey-8 q-mt-sm">
+                {{ poster.title }} – kliknite pre zväčšenie
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <q-dialog v-model="showPlagatDialog">
+          <q-card v-if="activePoster" class="plagat-dialog">
+            <q-card-section class="row items-center q-pb-none">
+              <div class="text-h6">{{ activePoster.title }}</div>
+              <q-space />
+              <q-btn
+                icon="close"
+                flat
+                round
+                dense
+                v-close-popup
+                aria-label="Zavrieť"
+              />
+            </q-card-section>
+            <q-card-section>
+              <img
+                :src="activePoster.src"
+                :alt="activePoster.alt"
+                class="plagat-full-size"
+              />
+            </q-card-section>
+          </q-card>
+        </q-dialog>
+      </template>
+
+      <!-- Ostatné projekty -->
+      <section v-else class="detail-section">
+        <p
+          v-for="(paragraph, index) in paragraphs"
+          :key="index"
+          class="section-text"
+        >
+          {{ paragraph }}
+        </p>
+      </section>
+
+      <div class="buttons-wrapper">
+        <q-btn
+          v-if="project.slug === 'pinokio'"
+          label="Zobraziť pracovné pozície"
+          color="orange-7"
+          icon="work"
+          unelevated
+          :to="{ name: 'job-positions' }"
+        />
+        <q-btn
+          label="Späť na projekty"
+          color="primary"
+          icon="arrow_back"
+          outline
+          :to="{ name: 'projects' }"
+        />
       </div>
     </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import EuFundingBar from 'components/EuFundingBar.vue';
+import { findProject } from 'src/data/projects';
+import plagatUrl from 'assets/plagat.jpg';
+import plagatKontaktUrl from 'assets/plagat_kontakt.jpg';
 
-interface Project {
-  slug: string;
-  name: string;
-  icon: string;
-  iconColor: string;
-  shortPurpose: string;
-  description: string;
+interface Poster {
+  src: string;
+  title: string;
+  alt: string;
 }
 
-const route = useRoute();
-const router = useRouter();
-const slug = route.params.slug as string;
-
-// Rovnakých 8 projektov, s "iconColor" + "icon" + plné texty:
-const allProjects: Project[] = [
+const posters: Poster[] = [
   {
-    slug: 'hodnota-nad-bohatstvom',
-    name: 'Hodnota nad bohatstvom',
-    icon: 'favorite_border',
-    iconColor: 'pink-7',
-    shortPurpose: 'Výchova k šťastiu a životným hodnotám',
-    description: `Namiesto toho, aby sme deti učili túžiť po bohatstve, je dôležité ich viesť k poznaniu,
-že skutočná hodnota života nespočíva v materiálnych veciach, ale vo vnútornom šťastí, vďačnosti a vzťahoch.
-
-V tomto projekte sme organizovali workshopy a besedy pre rodiny aj školy, kde sme vysvetľovali,
-že pravé šťastie pramení z empatických vzťahov a každodennej radosti, nie z majetku.
-Učili sme žiakov rozvíjať emocionálnu inteligenciu, aplikovať cvičenia vďačnosti
-a tým znižovať tlak konzumného sveta. Táto výchova k jednoduchosti a empatii
-prispieva k duševnej rovnováhe a k zdravším rodinným hodnotám.`,
+    src: plagatUrl,
+    title: 'Informačný plagát projektu',
+    alt: 'Informačný plagát projektu PINOKIO so základnými informáciami, identifikáciou projektu a logami spolufinancovania z Európskej únie',
   },
   {
-    slug: 'zdravie-na-tanieri',
-    name: 'Zdravie na tanieri',
-    icon: 'restaurant',
-    iconColor: 'green-8',
-    shortPurpose: 'Vzťah výživy a životnej kvality',
-    description: `Strava je základným pilierom sociálneho zdravia a kvality života.
-V rámci tejto iniciatívy sme usporiadali praktické kurzy varenia a diskusie s rodinami
-o dostupnosti kvalitných potravín. Pomáhali sme pri plánovaní jedálnička tak,
-aby zdravé jedlo nebolo luxusom, ale bežnou súčasťou domácností.
-Učili sme účastníkov, ako správne zložená strava môže predchádzať civilizačným ochoreniam
-(obezita, cukrovka, srdcovo-cievne ťažkosti) a prispievať k fyzickej pohode aj
-dlhodobému zlepšeniu kvality života.`,
-  },
-  {
-    slug: 'sila-lasky',
-    name: 'Sila lásky',
-    icon: 'favorite',
-    iconColor: 'red-10',
-    shortPurpose: 'Spojitosť medzi vernosťou a sociálnymi vzťahmi',
-    description: `Vďaka diskusným stretnutiam a besedám sme ukázali, aký význam má dôvera,
-vernosť a vzájomná úcta pri budovaní stabilných rodín a komunít.
-Láska a priateľstvo nie sú len osobné emócie, ale silné sociálne piliere,
-ktoré ovplyvňujú psychické zdravie a pocit spolupatričnosti.
-Učili sme páry aj jednotlivcov, že pri partnerských krízach je dôležité
-hľadať riešenia namiesto rýchleho úniku. Tým predchádzame izolácii,
-osamelosti a podporujeme silnejšie komunity.`,
-  },
-  {
-    slug: 'spolu-sme-silnejsi',
-    name: 'Spolu sme silnejší',
-    icon: 'group_work',
-    iconColor: 'deep-purple-6',
-    shortPurpose: 'Sociálna spolupráca ako cesta k pokroku',
-    description: `Jednotlivec môže dosiahnuť rýchly úspech, ale skutočná sila spoločnosti
-vzniká zo spolupráce a spolupatričnosti. V tomto projekte sme usporiadali dielne tímovej práce,
-kde sme ľudí viedli k spoločnému riešeniu lokálnych problémov – napríklad
-úprava komunitného ihriska, pomoc starším či znevýhodneným.
-Takáto solidarita a kolektívne úsilie prekonávajú systémové problémy
-(chudobu, nerovnosť) a prinášajú inovatívne nápady pre celé komunity.`,
-  },
-  {
-    slug: 'peer-skupiny-silne-dievcata',
-    name: 'Peer skupiny – Silné dievčatá',
-    icon: 'diversity_3',
-    iconColor: 'amber-6',
-    shortPurpose: 'Práca s mládežou, hlavne s mladými dievčatami',
-    description: `Vytvárame peer skupiny pre dievčatá v tínedžerskom veku,
-kde si navzájom pomáhajú v otázkach zdravia, sebaúcty a osobnostného rastu.
-Pod vedením mentorky rozoberajú témy ako bezpečnosť, vzťahy, kariérny rozvoj
-a učia sa lepšej komunikácii. Tým posilňujú svoju sebadôveru,
-vznikajú pevné priateľstvá a podporujú základné hodnoty pre kvalitný život
-a budúcu integráciu do spoločnosti.`,
-  },
-  {
-    slug: 'sanca-na-lepsi-zivot',
-    name: 'Šanca na lepší (a zdravší) život',
-    icon: 'accessibility_new',
-    iconColor: 'cyan-8',
-    shortPurpose: 'Osveta o psychomotorickom vývine detí a zlepšenie podmienok',
-    description: `Projekt sa orientuje na rodiny s malými deťmi, kde prebiehajú prednášky
-o psychomotorickom vývine a praktické ukážky cvičení na podporu správneho rastu detí.
-Spolupracujeme s terénnymi pracovníkmi, aby sme rodinám v núdzi mohli
-poskytnúť základnú pomoc (plienky, výživové doplnky, hračky na rozvoj).
-Tým zlepšujeme životné vyhliadky rodín a prispievame k zdravšej komunite
-s dobrými štartovacími podmienkami pre deti.`,
-  },
-  {
-    slug: 'cisty-domov',
-    name: 'Čistý domov',
-    icon: 'cleaning_services',
-    iconColor: 'teal-8',
-    shortPurpose: 'Zvýšenie povedomia o dôležitosti čistoty a poriadku',
-    description: `Projekt Čistý domov sa zameriava na prednášky a praktické workshopy
-v komunitách, kde ľuďom vysvetľujeme, prečo je dôležité udržiavať čistotu
-v domácnosti aj v okolí domu. Pomáhame organizovať dobrovoľnícke
-upratovacie akcie, rozdávame letáky o udržateľných čistiacich prostriedkoch.
-Tým prispievame k zlepšeniu hygienických návykov, znižujeme riziko chorôb
-a zvyšujeme celkovú kvalitu života v komunite.`,
-  },
-  {
-    slug: 'sikovne-ruky',
-    name: 'Šikovné ruky',
-    icon: 'handyman',
-    iconColor: 'brown-7',
-    shortPurpose: 'Zapojenie žien na materskej do tvorivých aktivít',
-    description: `Tento program oslovuje ženy na materskej a rodičovskej dovolenke,
-aby sa zapojili do rôznych dielní a workshopov (šitie, ručné práce, výroba suvenírov).
-Rozvíjajú tak praktické zručnosti, ktoré môžu využiť pri hľadaní zamestnania
-alebo na rozbehnutie drobného podnikania. Stretávajú sa, vymieňajú si nápady
-a navzájom sa motivujú. Tým získavajú sebadôveru, sociálnu aj finančnú podporu
-a rozširujú obzory pre budúce pracovné príležitosti.`,
-  },
-  {
-    slug: 'pinokio',
-    name: '',
-    icon: 'work_outline',
-    iconColor: 'blue-7',
-    shortPurpose:
-      '',
-    description: `Projekt je zameraný na podporu neaktívnych mladých osôb do 30 rokov (NEET), ktoré nie sú zamestnané, nie sú vo výcviku, nevzdelávajú sa a ani nie sú evidované na úrade práce. Jeho hlavným cieľom je ich priblíženie k trhu práce prostredníctvom cielenej pomoci v teréne.
-
-Realizuje sa v najmenej rozvinutých okresoch: Košice-okolie, Michalovce, Stropkov, Svidník, Trebišov, Humenné a Vranov nad Topľou na obdobie 24 mesiacov od 1.11.2025.
-
-Aktivity projektu sú navrhnuté tak, aby účinne motivovali a podporovali jednotlivcov pri hľadaní pracovného uplatnenia a vytvárali podmienky pre ich dlhodobú pracovnú integráciu. Tím skúsených pracovníkov zabezpečí efektívnu implementáciu jednotlivých aktivít.
-
-Našou ambíciou je vytvoriť inkluzívnejší a dostupnejší trh práce, kde každý dostane reálnu príležitosť na pracovné uplatnenie. Každý človek si zaslúži šancu na dôstojný život a pracovné uplatnenie, a preto chceme týmto projektom vytvoriť podmienky, ktoré im umožnia naplno využiť svoj potenciál a aktívne sa zapojiť do spoločnosti.`,
+    src: plagatKontaktUrl,
+    title: 'Kontaktná dostupnosť',
+    alt: 'Plagát Kontaktná dostupnosť projektu PINOKIO: pondelok až piatok 8:00 – 17:00, kontaktná osoba Mgr. Mária Saraková, telefón +421 918 371 861',
   },
 ];
 
-const project = ref<Project | null>(null);
+const route = useRoute();
+const router = useRouter();
 const showPlagatDialog = ref(false);
+const activePoster = ref<Poster | null>(null);
 
-// Rozdelenie description na odseky
-const formattedDescription = computed(() => {
-  if (!project.value?.description) return [];
+function openPoster(poster: Poster) {
+  activePoster.value = poster;
+  showPlagatDialog.value = true;
+}
 
-  // Rozdelenie podľa prázdnych riadkov a filtrovanie prázdnych
-  return project.value.description
+const project = computed(() => findProject(route.params.slug as string));
+const eu = computed(() => project.value?.eu);
+
+watch(
+  project,
+  (found) => {
+    if (!found) router.replace({ name: 'projects' });
+  },
+  { immediate: true }
+);
+
+const paragraphs = computed(() =>
+  (project.value?.description ?? '')
     .split('\n\n')
     .map((p) => p.trim())
-    .filter((p) => p.length > 0);
+    .filter((p) => p.length > 0)
+);
+
+const infoRows = computed(() => {
+  const info = eu.value;
+  if (!info) return [];
+  return [
+    { label: 'Kód projektu', value: info.projectCode },
+    { label: 'Prijímateľ', value: info.beneficiary },
+    { label: 'Program', value: info.program },
+    { label: 'Fond', value: info.fund },
+    { label: 'Priorita', value: info.priority },
+    { label: 'Špecifický cieľ', value: info.specificObjective },
+    { label: 'Výzva', value: info.callCode },
+    { label: 'Názov výzvy', value: info.callName },
+    { label: 'Sprostredkovateľský orgán', value: info.provider },
+    { label: 'Obdobie realizácie projektu', value: info.realizationPeriod },
+    { label: 'Miesto realizácie projektu', value: info.place },
+    {
+      label: 'Kontakt',
+      value: info.contactPhone,
+      href: `tel:${info.contactPhone.replace(/\s/g, '')}`,
+    },
+  ];
 });
-
-onMounted(() => {
-  const found = allProjects.find((p) => p.slug === slug);
-  if (!found) {
-    router.replace({ name: 'projects' });
-  } else {
-    project.value = found;
-  }
-});
-
-function goBack() {
-  router.push({ name: 'projects' });
-}
-
-function goToJobPositions() {
-  router.push({ name: 'job-positions' });
-}
 </script>
 
 <style scoped>
 .project-detail-page {
-  max-width: 1200px;
-  margin: 0 auto;
-  background-color: #fff;
-  border-radius: 8px;
-  min-height: 80vh;
+  background: linear-gradient(to bottom, #f5f8fc 0%, #ffffff 420px);
 }
 
-.detail-container {
-  max-width: 1000px;
+/* Jeden vycentrovaný stĺpec */
+.detail-column {
+  max-width: 860px;
   margin: 0 auto;
 }
 
-/* Ľavý stĺpec (ikona, názov) */
-.detail-left {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  border-radius: 8px;
-  padding: 1rem;
-
-  margin-right: 1rem;
-  margin-bottom: 1rem;
+/* Hlavička projektu */
+.detail-header {
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
-.icon-box {
-  width: 80px;
-  height: 80px;
+/* Logo projektu nesmie byť väčšie než znak EÚ (Manuál P SK v2.0, kap. 4.6 a 4.7) */
+.pinokio-logo {
+  height: 72px;
+  width: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.icon-circle {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  margin: 0 auto;
   border-radius: 50%;
-  background-color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+.icon-circle::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.12;
+}
+
 .detail-title {
-  font-size: 1.3rem;
-  margin: 1rem 0 0.25rem 0;
-  text-align: center;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #0d47a1;
+  margin: 1rem auto 0.5rem;
+  max-width: 720px;
 }
 
 .detail-subtitle {
-  color: #666;
-  font-size: 0.95rem;
-  text-align: center;
+  color: #555;
+  font-size: 1.05rem;
+  margin: 0 0 1rem;
 }
 
-/* Pravý stĺpec (text) */
-.detail-right {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  background-color: #fcfcfc;
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
-}
-
-/* Wrapper pre tlačidlá */
-.buttons-wrapper {
+.detail-chips {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.5rem;
-  margin-top: 2rem;
+}
+
+.chip {
+  display: inline-flex;
   align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  background: #e3f2fd;
+  color: #0d47a1;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
-/* Formátovanie pre ostatné projekty */
-.formatted-project-detail {
-  width: 100%;
-}
-
-.detail-paragraph {
-  margin-bottom: 1.5rem;
-  padding: 1.25rem;
-  background: white;
-  border-radius: 8px;
-  border-left: 3px solid #e0e0e0;
-  transition: all 0.2s ease;
-}
-
-.detail-paragraph:hover {
-  border-left-color: #1976d2;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transform: translateX(3px);
-}
-
-.detail-paragraph:last-child {
-  margin-bottom: 0;
-}
-
-/* Špeciálne formátovanie pre PINOKIO */
-.pinokio-detail {
-  width: 100%;
-}
-
+/* Sekcie */
 .detail-section {
-  margin-bottom: 2rem;
-  padding: 1.5rem;
-  background: white;
-  border-radius: 8px;
-  border-left: 4px solid #1976d2;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: 1.5rem;
+  padding: 1.75rem 2rem;
+  background: #fff;
+  border-radius: 12px;
+  border-top: 4px solid #1976d2;
+  box-shadow: 0 2px 12px rgba(13, 71, 161, 0.07);
 }
 
-.detail-section:hover {
-  transform: translateX(4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+.accent-orange {
+  border-top-color: #f57c00;
+}
+
+.accent-green {
+  border-top-color: #21ba45;
+}
+
+.accent-amber {
+  border-top-color: #ffb300;
+}
+
+.vision-section {
+  background: linear-gradient(135deg, #fffbf0 0%, #ffffff 100%);
 }
 
 .section-header {
   display: flex;
   align-items: center;
-  margin-bottom: 1rem;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0 0 1.25rem;
+  font-size: 1.35rem;
   font-weight: 600;
+  line-height: 1.4;
+  color: #0d47a1;
+  text-align: center;
 }
 
 .section-text {
   line-height: 1.8;
   color: #424242;
-  text-align: justify;
-  margin-bottom: 0.75rem;
+  margin: 0 0 0.75rem;
 }
 
 .section-text:last-child {
@@ -533,78 +441,157 @@ function goToJobPositions() {
 }
 
 .section-text strong {
+  color: #1565c0;
+}
+
+.section-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  line-height: 1.8;
+  color: #424242;
+}
+
+.section-list li + li {
+  margin-top: 0.4rem;
+}
+
+.section-list li::marker {
   color: #1976d2;
-  font-weight: 600;
 }
 
-.vision-section {
-  border-left-color: #ffa726;
-  background: linear-gradient(135deg, #fffbf0 0%, #ffffff 100%);
-}
-
-/* Logo PINOKIO */
-.pinokio-logo {
-  max-width: 300px;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
-
-/* Grid pre informácie o projekte */
-.project-info-grid {
-  display: grid;
-  gap: 0.75rem;
-}
-
-.info-item {
+/* Okresy */
+.district-list {
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding: 0.75rem;
-  background: #f8f9fa;
-  border-radius: 6px;
-  transition: background 0.2s ease;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
-.info-item:hover {
-  background: #e9ecef;
-}
-
-.info-label {
-  font-weight: 600;
-  color: #666;
-  font-size: 0.85rem;
-}
-
-.info-value {
-  color: #1976d2;
+.district {
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  background: #fff3e0;
+  color: #8a4b00;
   font-weight: 500;
 }
 
-.highlight-item {
-  background: linear-gradient(135deg, #e3f2fd 0%, #f1f8ff 100%);
-  border: 2px solid #1976d2;
+/* Výsledky */
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.75rem;
 }
 
-.highlight-item .info-value {
-  font-size: 1.2rem;
+.result-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1rem;
+  background: #f1f8e9;
+  border-radius: 8px;
+}
+
+.result-value {
+  font-size: 1.75rem;
   font-weight: 700;
+  color: #2e7d32;
 }
 
-/* Plagát a logá */
+.result-label {
+  color: #424242;
+  font-size: 0.9rem;
+}
+
+/* Identifikácia projektu */
+.info-table {
+  margin: 0;
+  border: 1px solid #e3e8ef;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.info-row {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+}
+
+.info-row + .info-row {
+  border-top: 1px solid #e3e8ef;
+}
+
+.info-row dt,
+.info-row dd {
+  margin: 0;
+  padding: 0.7rem 1rem;
+  line-height: 1.5;
+}
+
+.info-row dt {
+  background: #f5f8fc;
+  font-weight: 600;
+  color: #455a64;
+}
+
+.info-row dd {
+  color: #1a237e;
+}
+
+.info-row dd a {
+  color: inherit;
+}
+
+.info-row-highlight dt,
+.info-row-highlight dd {
+  background: #e3f2fd;
+  font-weight: 700;
+  color: #0d47a1;
+}
+
+.info-row-highlight dd {
+  font-size: 1.15rem;
+}
+
+/* Plagáty */
+.posters-section {
+  margin: 2.5rem 0 0;
+}
+
+.posters-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.poster {
+  flex: 1 1 220px;
+  max-width: 320px;
+  margin: 0;
+  text-align: center;
+}
+
+.plagat-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+  display: block;
+  width: 100%;
+}
+
 .plagat-thumbnail {
-  max-width: 400px;
+  width: 100%;
   height: auto;
   display: block;
-  margin: 0 auto;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.plagat-thumbnail:hover {
-  transform: scale(1.05);
+.plagat-button:hover .plagat-thumbnail,
+.plagat-button:focus-visible .plagat-thumbnail {
+  transform: scale(1.03);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
@@ -619,54 +606,47 @@ function goToJobPositions() {
   display: block;
 }
 
-.funding-text {
-  color: #424242;
-  font-weight: 500;
-  line-height: 1.8;
-  max-width: 700px;
-  margin: 0 auto;
+/* Tlačidlá */
+.buttons-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1rem;
 }
 
-.funding-logos {
-  max-width: 600px;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
-
-/* Responsivita */
+/* Responzivita */
 @media (max-width: 768px) {
+  .detail-title {
+    font-size: 1.35rem;
+  }
+
   .detail-section {
-    padding: 1rem;
+    padding: 1.25rem 1rem;
   }
 
   .section-header {
-    font-size: 1rem;
+    font-size: 1.15rem;
   }
 
-  .detail-paragraph {
-    padding: 1rem;
+  .info-row {
+    grid-template-columns: 1fr;
   }
 
-  .buttons-wrapper {
-    flex-direction: column;
-    gap: 0.75rem;
+  .info-row dt {
+    padding-bottom: 0.25rem;
+  }
+
+  .info-row dd {
+    padding-top: 0.25rem;
   }
 
   .buttons-wrapper .q-btn {
     width: 100%;
   }
 
-  .plagat-thumbnail {
-    max-width: 100%;
-  }
-
-  .funding-logos {
-    max-width: 100%;
-  }
-
   .pinokio-logo {
-    max-width: 200px;
+    height: 44px;
   }
 }
 </style>

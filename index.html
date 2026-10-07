@@ -13,7 +13,7 @@
     <meta name="msapplication-tap-highlight" content="no" />
     <meta
       name="viewport"
-      content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (ctx.mode.cordova || ctx.mode.capacitor) { %>, viewport-fit=cover<% } %>"
+      content="width=device-width, initial-scale=1<% if (ctx.mode.cordova || ctx.mode.capacitor) { %>, viewport-fit=cover<% } %>"
     />
 
     <!-- Canonical URL -->
@@ -24,7 +24,9 @@
     <meta property="og:url" content="https://jednaznas.sk/" />
     <meta property="og:title" content="<%= productName %> - Občianske združenie" />
     <meta property="og:description" content="<%= productDescription %>" />
-    <meta property="og:image" content="https://jednaznas.sk/favicon.png" />
+    <meta property="og:image" content="https://jednaznas.sk/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:locale" content="sk_SK" />
     <meta property="og:site_name" content="JEDNA Z NÁS" />
 
@@ -33,14 +35,14 @@
     <meta name="twitter:url" content="https://jednaznas.sk/" />
     <meta name="twitter:title" content="<%= productName %> - Občianske združenie" />
     <meta name="twitter:description" content="<%= productDescription %>" />
-    <meta name="twitter:image" content="https://jednaznas.sk/favicon.png" />
+    <meta name="twitter:image" content="https://jednaznas.sk/og-image.jpg" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon.png" />
-    <link rel="shortcut icon" type="image/png" href="favicon.png" />
-    <link rel="apple-touch-icon" href="favicon.png" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="shortcut icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
 
-    <!-- Structured Data / JSON-LD -->
+    <!-- Structured Data / JSON-LD - Organization -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -57,6 +59,23 @@
         "name": "Slovakia"
       },
       "sameAs": []
+    }
+    </script>
+
+    <!-- Structured Data / JSON-LD - WebSite -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "JEDNA Z NÁS",
+      "alternateName": "Občianske združenie JEDNA Z NÁS",
+      "url": "https://jednaznas.sk",
+      "description": "Občianske združenie zamerané na pomoc znevýhodneným skupinám na Slovensku.",
+      "inLanguage": "sk",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Občianske združenie JEDNA Z NÁS"
+      }
     }
     </script>
   </head>

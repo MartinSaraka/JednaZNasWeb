@@ -1,0 +1,13 @@
+# SPA (Vue Router v režime history): všetky adresy, ktoré nie sú súbor
+# ani priečinok, presmeruj na index.html – inak /projects a pod. vrátia 404.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
+
+# Záloha, ak by mod_rewrite nebol dostupný
+ErrorDocument 404 /index.html
