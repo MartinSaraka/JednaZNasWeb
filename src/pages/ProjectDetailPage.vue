@@ -167,6 +167,7 @@
                   width="1054"
                   height="1492"
                   loading="lazy"
+                  decoding="async"
                 />
               </button>
               <figcaption class="text-caption text-grey-8 q-mt-sm">
