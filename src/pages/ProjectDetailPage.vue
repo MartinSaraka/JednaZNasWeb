@@ -150,7 +150,7 @@
         <section class="posters-section">
           <h2 class="section-header">
             <q-icon name="image" color="primary" size="26px" />
-            Plagáty a leták projektu
+            Plagáty projektu
           </h2>
           <div class="posters-row">
             <figure v-for="poster in posters" :key="poster.src" class="poster">
@@ -240,7 +240,6 @@ import EuFundingBar from 'components/EuFundingBar.vue';
 import { findProject } from 'src/data/projects';
 import plagatUrl from 'assets/plagat.jpg';
 import plagatKontaktUrl from 'assets/plagat_kontakt.jpg';
-import letakUrl from 'assets/letak.jpg';
 
 interface Poster {
   src: string;
@@ -258,11 +257,6 @@ const posters: Poster[] = [
     src: plagatKontaktUrl,
     title: 'Kontaktná dostupnosť',
     alt: 'Plagát Kontaktná dostupnosť projektu PINOKIO: pondelok až piatok 8:00 – 17:00, kontaktná osoba Mgr. Mária Saraková, telefón +421 918 371 861',
-  },
-  {
-    src: letakUrl,
-    title: 'Leták projektu',
-    alt: 'Leták projektu PINOKIO: Hľadáš prácu? Nie si na to sám/sama. Ponúkame individuálne poradenstvo, pomoc so životopisom a pohovorom, pracovné ponuky a rozvoj pracovných návykov pre mladých ľudí do 30 rokov. Zapojenie je bezplatné. Kontakt: +421 918 371 861, jednaznasoz@gmail.com',
   },
 ];
 
